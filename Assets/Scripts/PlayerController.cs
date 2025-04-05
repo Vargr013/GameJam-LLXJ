@@ -2,12 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
 public class PlayerController : MonoBehaviour
 {
     //Declaration 
     public float walkSpeed = 24f;
+    public float jumpImpulse = 10f;
     Vector2 moveInput;
+    TouchingDirections touchingDirection;
 
     //Bool to keep track of the players movement status
     [SerializeField]
@@ -51,26 +53,19 @@ public class PlayerController : MonoBehaviour
     //Animator for animation 
     Animator animator;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        touchingDirection = GetComponent<TouchingDirections>();
     }
     private void FixedUpdate()
     {
+        //Set movement
         rb.linearVelocity = new Vector2(moveInput.x * walkSpeed * Time.fixedDeltaTime, rb.linearVelocity.y);
+        
+        //Jumping code
+        animator.SetFloat("yVelocity", rb.linearVelocity.y);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -97,6 +92,24 @@ public class PlayerController : MonoBehaviour
         {
             //Facing to the left 
             IsFacingRight = false;
+        }
+    }
+    
+    //Jumping method 
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if (context.started && touchingDirection.IsGrounded)
+        {
+            animator.SetTrigger("Jump");
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
+        }
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            animator.SetTrigger("Attack");
         }
     }
 }
