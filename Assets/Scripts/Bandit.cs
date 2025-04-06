@@ -1,12 +1,14 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
+[RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections), typeof(Animator))]
 public class Bandit : MonoBehaviour
 {
     public float walkSpeed = 3f;
+    public DetectionZone attackZone;
 
     private Rigidbody2D rb;
     TouchingDirections direction;
+    Animator animator;
     
     public enum WalkableDirection
     {
@@ -14,7 +16,7 @@ public class Bandit : MonoBehaviour
     }
     
     private WalkableDirection _walkDirection;
-    private Vector2 walkDirectionVector;
+    private Vector2 walkDirectionVector = Vector2.right;
 
     public WalkableDirection WalkDirection
     {
@@ -24,7 +26,7 @@ public class Bandit : MonoBehaviour
 
             if (_walkDirection != value)
             {
-                //Direction fliped 
+                //Direction flipped 
                 gameObject.transform.localScale = new Vector2(gameObject.transform.localScale.x * -1, gameObject.transform.localScale.y);
 
                 if (value == WalkableDirection.Right)
@@ -36,14 +38,34 @@ public class Bandit : MonoBehaviour
                 {
                     walkDirectionVector = Vector2.left;
                 }
+                
             }
+            _walkDirection = value;
         }
+    }
+    public bool _HasTarget = false;
+    
+    public bool HasTarget
+    {
+        get { return _HasTarget;}
+        private set
+        {
+            animator.SetBool("hasTarget", value);
+            _HasTarget = value;
+        } 
     }
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         direction = GetComponent<TouchingDirections>();
+        animator = GetComponent<Animator>();
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        HasTarget = attackZone.detectedColliders.Count > 0;
     }
 
     private void FixedUpdate()
@@ -53,6 +75,7 @@ public class Bandit : MonoBehaviour
             FlipDirection();
         }
         rb.linearVelocity = new Vector2(walkSpeed * walkDirectionVector.x, rb.linearVelocity.y);
+        
     }
 
     private void FlipDirection()
@@ -72,9 +95,5 @@ public class Bandit : MonoBehaviour
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

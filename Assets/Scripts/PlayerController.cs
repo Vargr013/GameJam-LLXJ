@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     }
     
     //Rigidbody to enable movement 
-    Rigidbody2D rb;
+    public Rigidbody2D rb;
     
     //Animator for animation 
     Animator animator;
