@@ -110,6 +110,8 @@ public class PlayerController : MonoBehaviour
         if (context.started)
         {
             animator.SetTrigger("Attack");
+            
+            
         }
     }
 }

@@ -5,10 +5,12 @@ public class Bandit : MonoBehaviour
 {
     public float walkSpeed = 3f;
     public DetectionZone attackZone;
+    public DetectionZone cliffDetectionZone;
 
     private Rigidbody2D rb;
     TouchingDirections direction;
     Animator animator;
+    
     
     public enum WalkableDirection
     {
@@ -70,7 +72,7 @@ public class Bandit : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (direction.IsGrounded && direction.IsOnWall)
+        if (direction.IsGrounded && direction.IsOnWall || cliffDetectionZone.detectedColliders.Count == 0)
         {
             FlipDirection();
         }

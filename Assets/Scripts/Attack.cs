@@ -15,7 +15,7 @@ public class Attack : MonoBehaviour
     {
         //See if the player can be hit 
         Damageable damageable = collision.GetComponent<Damageable>();
-
+    
         if (damageable != null)
         {
             //Hit the target 
