@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Damageable : MonoBehaviour
 {
+
+    
     [SerializeField]
     private int _maxHealth = 100;
 
@@ -31,9 +33,22 @@ public class Damageable : MonoBehaviour
         {
             _currentHealth = value;
             
-            //Health below 0 
-            if (_currentHealth < 0)
+            if (gameObject.CompareTag("Player"))
             {
+                if (healthController.CompareTag("HealthBar"))
+                {
+                    HealthBar healthBarInst = healthController.GetComponent<HealthBar>();
+                    
+                    healthBarInst.UpdateHealthBar();
+                }
+                
+                Debug.Log("Current Health: " + _currentHealth);
+            }
+            
+            //Health below or equal 0 
+            if (_currentHealth <= 0)
+            {
+                _currentHealth = 0;
                 IsAlive = false; 
             }
         }
@@ -48,9 +63,13 @@ public class Damageable : MonoBehaviour
     public float despawnTime = 1.25f;
     private GameObject enemy, player;
     private PlayerController playerController;
+    private GameObject healthController;
     
     [SerializeField]
     private bool isPlayer = false; 
+    //Wait 5 seconds then freeze player 
+    float pauseTimer = 3f;
+    private bool deathScreen = false; 
     public bool IsAlive
     {
         get
@@ -79,6 +98,10 @@ public class Damageable : MonoBehaviour
                     {
                         playerController.rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
                     }
+                    
+                    //Set timer active 
+                    deathScreen = true;
+
                 }
             }
             
@@ -90,7 +113,6 @@ public class Damageable : MonoBehaviour
                 }
                 
             }
-           
             
         }
     }
@@ -100,6 +122,7 @@ public class Damageable : MonoBehaviour
         animator = GetComponent<Animator>();
         enemy = GameObject.FindGameObjectWithTag("Enemy");
         player = GameObject.FindGameObjectWithTag("Player");
+        healthController = GameObject.FindGameObjectWithTag("HealthBar");
 
         //Stop movement for player when dead
         playerController = player.GetComponent<PlayerController>();
@@ -113,7 +136,6 @@ public class Damageable : MonoBehaviour
     {
         if (isInvincible)
         {
-            
             if (timeSinceHit > invincibleTime)
             {
                 isInvincible = false;
@@ -124,6 +146,19 @@ public class Damageable : MonoBehaviour
         }
         
         //Hit(10);
+        //Check for death screen and freeze game, on timer
+        if (deathScreen)
+        {
+            //Timer to freeze the game after a few seconds
+            pauseTimer -= Time.deltaTime;
+            if (pauseTimer <= 0.0)
+            {
+                //Freeze Game
+                Time.timeScale = 0f;
+                //Show death Screen
+            }    
+        }
+       
     }
 
     public void Hit(int damage)
