@@ -7,8 +7,8 @@ public class Damageable : MonoBehaviour
     [SerializeField]
     private int _maxHealth = 100;
 
-    private Animator animator; 
-
+    private Animator animator;
+    public GameObject DeathScreenUI;
     public int MaxHealth
     {
         get
@@ -48,6 +48,11 @@ public class Damageable : MonoBehaviour
             //Health below or equal 0 
             if (_currentHealth <= 0)
             {
+                if (gameObject.CompareTag("Enemy"))
+                {
+                    gameObject.tag = "DeadEnemy";
+                    Debug.Log(gameObject.tag);
+                }
                 _currentHealth = 0;
                 IsAlive = false; 
             }
@@ -107,7 +112,7 @@ public class Damageable : MonoBehaviour
             
             if (enemy != null)
             {
-                if (gameObject.CompareTag("Enemy"))
+                if (gameObject.CompareTag("DeadEnemy"))
                 {
                     GameObject.Destroy(enemy, despawnTime);
                 }
@@ -149,13 +154,14 @@ public class Damageable : MonoBehaviour
         //Check for death screen and freeze game, on timer
         if (deathScreen)
         {
+            //Show death Screen
+            DeathScreenUI.SetActive(true);
             //Timer to freeze the game after a few seconds
             pauseTimer -= Time.deltaTime;
             if (pauseTimer <= 0.0)
             {
                 //Freeze Game
                 Time.timeScale = 0f;
-                //Show death Screen
             }    
         }
        
