@@ -1,6 +1,8 @@
 using System;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(TouchingDirections))]
 public class PlayerController : MonoBehaviour
@@ -10,6 +12,12 @@ public class PlayerController : MonoBehaviour
     public float jumpImpulse = 10f;
     Vector2 moveInput;
     TouchingDirections touchingDirection;
+    [SerializeField]
+
+    AudioSource speaker;
+
+    [SerializeField]
+    public AudioClip[] audioClips;
 
     //Bool to keep track of the players movement status
     [SerializeField]
@@ -73,7 +81,19 @@ public class PlayerController : MonoBehaviour
     {
         //Check if moving
         moveInput = context.ReadValue<Vector2>();
-        
+        if (moveInput.x != 0 && moveInput.y == 0)
+        {
+            OnWalkSound();
+
+            
+
+
+        }
+        else 
+        {
+            speaker.Stop();
+        }
+            
         //Assign isMoving to control animations
         IsMoving = moveInput != Vector2.zero;
         
@@ -111,8 +131,26 @@ public class PlayerController : MonoBehaviour
         if (context.started)
         {
             animator.SetTrigger("Attack");
-            
-            
+
+            OnSwordSound();
         }
+    }
+
+    public void OnSwordSound()
+    {
+
+        PlaySound(0);
+    }
+
+    public void OnWalkSound() 
+    { 
+        PlaySound(1); 
+    }
+    public void PlaySound(int i)
+    {
+        speaker.Stop();//
+
+        speaker.clip = audioClips[i];
+        speaker.Play(0);
     }
 }
