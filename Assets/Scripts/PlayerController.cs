@@ -12,7 +12,10 @@ public class PlayerController : MonoBehaviour
     public float jumpImpulse = 10f;
     Vector2 moveInput;
     TouchingDirections touchingDirection;
+    private int score = 0;
+    public int GetScore() { return score; }
     [SerializeField]
+        
 
     AudioSource speaker;
 
@@ -161,4 +164,6 @@ public class PlayerController : MonoBehaviour
         speaker.clip = audioClips[i];
         speaker.Play(0);
     }
+    
+    public void AddScore(int amount) { score += amount; }
 }
