@@ -42,7 +42,6 @@ public class Damageable : MonoBehaviour
                     healthBarInst.UpdateHealthBar();
                 }
                 
-                Debug.Log("Current Health: " + _currentHealth);
             }
             
             //Health below or equal 0 
@@ -50,9 +49,9 @@ public class Damageable : MonoBehaviour
             {
                 if (gameObject.CompareTag("Enemy"))
                 {
-                    gameObject.tag = "DeadEnemy";
-                    Debug.Log(gameObject.tag);
+                    gameObject.tag = "DeadEnemy";                  
                 }
+                Destroy(gameObject, 0.8f);
                 _currentHealth = 0;
                 IsAlive = false; 
             }

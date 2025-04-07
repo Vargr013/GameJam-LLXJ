@@ -123,7 +123,9 @@ public class PlayerController : MonoBehaviour
         {
             animator.SetTrigger("Jump");
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpImpulse);
+            OnJumpSound();
         }
+
     }
 
     public void OnAttack(InputAction.CallbackContext context)
@@ -146,6 +148,12 @@ public class PlayerController : MonoBehaviour
     { 
         PlaySound(1); 
     }
+
+    public void OnJumpSound() 
+    { 
+        PlaySound(2); 
+    }
+
     public void PlaySound(int i)
     {
         speaker.Stop();//
