@@ -1,13 +1,18 @@
 using TMPro;
 using UnityEngine;
 
+
+
 public class UIManager : MonoBehaviour
 {
-    private TextMeshPro scoreCounter;
+    private TextMeshProUGUI scoreCounter;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        scoreCounter = GameObject.Find("ScoreCounter").GetComponent<TextMeshPro>();
+        
+        scoreCounter = GameObject.Find("ScoreCounter").GetComponent<TextMeshProUGUI>();
+
+        
     }
 
     // Update is called once per frame

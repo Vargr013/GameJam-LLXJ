@@ -8,6 +8,7 @@ TagManager:
   - HealthBar
   - DeadEnemy
   - Coin
+  - Collectable
   layers:
   - Default
   - TransparentFX

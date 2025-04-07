@@ -159,7 +159,7 @@ public class PlayerController : MonoBehaviour
 
     public void PlaySound(int i)
     {
-        speaker.Stop();//
+        speaker.Stop();
 
         speaker.clip = audioClips[i];
         speaker.Play(0);

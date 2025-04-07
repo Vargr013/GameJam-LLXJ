@@ -19,19 +19,23 @@ public class CoinPickup : MonoBehaviour
         
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
+            Debug.Log("Coin detected collision");
             
-            //Add 1 to the score as you picked up the coin
+            //Destroy object
+            Destroy(gameObject);
+            
+            //Add 1 to the score as you pick up the coin
             player.AddScore(1);
             
             //Update score UI 
             uIManager.UpdateScore(player.GetScore());
+
             
-            //Destroy object
-            Destroy(gameObject);
+            
             
         }
     }
